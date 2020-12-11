@@ -1,5 +1,4 @@
 const mysql = require('mysql')
-// const connect = require('connect');
 const pool = require('../sql/connection')
 const { handleSQLError } = require('../sql/error')
 
@@ -25,128 +24,75 @@ const getUserById = (req, res) => {
   })
 }
 
-// Create only user
+// Create only user info
+// const createUser = (req, res) => {
+//   // INSERT INTO USERS FIRST AND LAST NAME 
+//   let sql = `INSERT INTO ?? (??, ??) VALUES (?, ?)`
+//   // WHAT GOES IN THE BRACKETS
+//   sql = mysql.format(sql, ['users', 'first_name', 'last_name', 
+//       firstName, lastName])
+// };
+
+//Sample user body info
+// {
+//   "first_name": "I.P.",
+//   "last_name": "Freely",
+//   "address": "123 Moe Steet",
+//   "city": "Springfelld",
+//   "county": "Flaming",
+//   "state": "IL",
+//   "zip": "56431",
+//   "phone1": "973-625-4286",
+//   "phone2": "973-627-2285",
+//   "email": "MoesTavern@email.com"
+// }
+
+// Create user with all info from body
 const createUser = (req, res) => {
-  // INSERT INTO USERS FIRST AND LAST NAME 
-  let sql = `INSERT INTO ?? (??, ??) VALUES (?, ?)`
-  // WHAT GOES IN THE BRACKETS
-  sql = mysql.format(sql, ['users', 'first_name', 'last_name', 
-      firstName, lastName])
-};
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected!
 
-
-// Create user and all tables
-// const createUser = (req, res) => {
-  // let firstName = req.body.first_name;
-  // let lastName = req.body.last_name;
-  // // let userId = LAST_INSERT_ID();
-  // let userAddress = req.body.address;
-  // let userCity = req.body.city;
-  // let userCounty = req.body.county;
-  // let userState = req.body.state;
-  // let userZip = req.body.zip;
-  // let userPhone1 = req.body.phone1;
-  // let userPhone2 = req.body.phone2;
-  // let userEmail = req.body.email;
-
-//   let sql = `START TRANSACTION; INSERT INTO ?? (??, ??) VALUES (?, ?); INSERT INTO ?? (??, ??, ??, ??, ??, ??) VALUES (LAST_INSERT_ID(), ?, ?, ?, ?, ?); INSERT INTO ?? (??, ??, ??, ??)VALUES(LAST_INSERT_ID(), ?, ?, ?); COMMIT;`
-//   // WHAT GOES IN THE BRACKETS
-//   sql = mysql.format(sql, ['users', 'first_name', 'last_name', firstName, lastName,
-//     "usersAddress", "user_id", "address", "city", "county", "state", "zip",
-//       userAddress, userCity, userCounty, userState, userZip,
-//       "usersContact", "user_id", "phone1", "phone2", "email",
-//         userPhone1, userPhone2, userEmail])
-
-//   pool.query(sql, (err, results) => {
-//     if (err) return handleSQLError(res, err)
-//     return res.json({ newId: results.insertId });
-//   })
-// }
-
-// const createUser = (req, res) => {
-//   let firstName = req.body.first_name;
-//   let lastName = req.body.last_name;
-//   // let userId = LAST_INSERT_ID();
-//   let userAddress = req.body.address;
-//   let userCity = req.body.city;
-//   let userCounty = req.body.county;
-//   let userState = req.body.state;
-//   let userZip = req.body.zip;
-//   let userPhone1 = req.body.phone1;
-//   let userPhone2 = req.body.phone2;
-//   let userEmail = req.body.email;
-//   // INSERT INTO USERS FIRST AND LAST NAME 
-//   let sql = `INSERT INTO ?? (??, ??) VALUES (?, ?)`
-//   // WHAT GOES IN THE BRACKETS
-//   sql = mysql.format(sql, ['users', 'first_name', 'last_name', 
-//       firstName, lastName])
-//   let sqlAddress = `INSERT INTO ?? (??, ??, ??, ??, ??, ??) VALUES (LAST_INSERT_ID(), ?, ?, ?, ?, ?)`
-//   // WHAT GOES IN THE BRACKETS
-//   sqlAddress = mysql.format(sql, ["usersAddress", "user_id", "address", "city", "county", "state", "zip",
-//         userAddress, userCity, userCounty, userState, userZip])
-//   let sqlContact = `INSERT INTO ?? (??, ??, ??, ??)VALUES(LAST_INSERT_ID(), ?, ?, ?)`
-//   // WHAT GOES IN THE BRACKETS
-//   sqlContact = mysql.format(sql, ["usersContact", "user_id", "phone1", "phone2", "email",
-//           userPhone1, userPhone2, userEmail])
-
-//   pool.query(sql, (err, results) => {
-//     if (err) return handleSQLError(res, err)
-//     // return res.json({ newId: results.insertId });
-//     next();
-//   })
-//   pool.query(sqlAddress, (err, results) => {
-//     if (err) return handleSQLError(res, err)
-//     // return res.json({ newId: results.insertId });
-//     next();
-//   })
-//   pool.query(sqlContact, (err, results) => {
-//     if (err) return handleSQLError(res, err)
-//     return res.json({ newId: results.insertId });
-//   })
-// }
-
-//Attempt to use NPM Connect = no good
-// const createUser = (req, res, next) => {
-//   let firstName = req.body.first_name;
-//   let lastName = req.body.last_name;
-//   // let userId = LAST_INSERT_ID();
-//   let userAddress = req.body.address;
-//   let userCity = req.body.city;
-//   let userCounty = req.body.county;
-//   let userState = req.body.state;
-//   let userZip = req.body.zip;
-//   let userPhone1 = req.body.phone1;
-//   let userPhone2 = req.body.phone2;
-//   let userEmail = req.body.email;
-//   // INSERT INTO USERS FIRST AND LAST NAME 
-//   let sql = `INSERT INTO ?? (??, ??) VALUES (?, ?)`
-//   // WHAT GOES IN THE BRACKETS
-//   sql = mysql.format(sql, ['users', 'first_name', 'last_name', 
-//       firstName, lastName])
-//   let sqlAddress = `INSERT INTO ?? (??, ??, ??, ??, ??, ??) VALUES (LAST_INSERT_ID(), ?, ?, ?, ?, ?)`
-//   // WHAT GOES IN THE BRACKETS
-//   sqlAddress = mysql.format(sql, ["usersAddress", "user_id", "address", "city", "county", "state", "zip",
-//         userAddress, userCity, userCounty, userState, userZip])
-//   let sqlContact = `INSERT INTO ?? (??, ??, ??, ??)VALUES(LAST_INSERT_ID(), ?, ?, ?)`
-//   // WHAT GOES IN THE BRACKETS
-//   sqlContact = mysql.format(sql, ["usersContact", "user_id", "phone1", "phone2", "email",
-//           userPhone1, userPhone2, userEmail])
-
-//   pool.query(sql, (err, results) => {
-//     if (err) return handleSQLError(res, err)
-//     // return res.json({ newId: results.insertId });
-//     next();
-//   })
-//   pool.query(sqlAddress, (err, results) => {
-//     if (err) return handleSQLError(res, err)
-//     // return res.json({ newId: results.insertId });
-//     next();
-//   })
-//   pool.query(sqlContact, (err, results) => {
-//     if (err) return handleSQLError(res, err)
-//     return res.json({ newId: results.insertId });
-//   })
-// }
+      connection.beginTransaction(function(err) {
+        if (err) { throw err; }
+        connection.query('INSERT INTO ?? (??, ??) VALUES (?, ?)',
+            ['users', 'first_name', 'last_name', req.body.first_name, req.body.last_name], function (error, results, fields) {
+          if (error) {
+            return connection.rollback(function() {
+              throw error;
+            });
+          }
+      
+          connection.query('INSERT INTO ?? (??, ??, ??, ??, ??, ??) VALUES (LAST_INSERT_ID(), ?, ?, ?, ?, ?)',
+              ["usersAddress", "user_id", "address", "city", "county", "state", "zip",
+              req.body.address, req.body.city, req.body.county, req.body.state, req.body.zip], function (error, results, fields) {
+            if (error) {
+              return connection.rollback(function() {
+                throw error;
+              });
+            }
+            connection.query('INSERT INTO ?? (??, ??, ??, ??)VALUES(LAST_INSERT_ID(), ?, ?, ?)',
+            ["usersContact", "user_id", "phone1", "phone2", "email",
+            req.body.phone1, req.body.phone2, req.body.email], function (error, results, fields) {
+              if (error) {
+                return connection.rollback(function() {
+                  throw error;
+                });
+              }
+              connection.commit(function(err) {
+                if (err) {
+                  return connection.rollback(function() {
+                    throw err;
+                  });
+                }
+              console.log('success!');
+              return res.json({ newId: results.insertId })
+            });
+          });
+        });
+      });
+    })
+  })
+}
 
 const updateUserById = (req, res) => {
   // UPDATE USERS AND SET FIRST AND LAST NAME WHERE ID = <REQ PARAMS ID>
